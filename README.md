@@ -33,3 +33,6 @@ Use `render.yaml` or configure the web service manually. Required production env
 
 ### User-uploaded photographs
 Render web-service filesystems are ephemeral. For durable production image storage, configure a persistent disk or an external object-storage service (for example Cloudinary or S3-compatible storage). Local development continues to use `MEDIA_ROOT`.
+
+## Render note
+The deployment package includes a root-level `render.yaml`. If Render reports that `render.yaml` cannot be found, make sure the repository contains the contents of this package at its root rather than nesting them inside another directory, or explicitly set the Blueprint path in Render.
