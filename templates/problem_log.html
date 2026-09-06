@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Report a Problem | UNIBEN IEPRTS{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center"><div class="col-xl-10">
+    <div class="mb-4"><div class="section-kicker">New Report</div><h2 class="section-title">Report an Infrastructure or Environmental Problem</h2><p class="text-muted">Give enough detail to help the responsible unit locate, assess and resolve the problem. Fields marked * are required.</p></div>
+    <form method="post" action="{% url 'process' %}" enctype="multipart/form-data" class="card p-4 p-lg-5">{% csrf_token %}
+      <div class="row g-4">
+        <div class="col-md-4"><label class="form-label">Main Category *</label><select id="category" name="category" class="form-select" required><option value="">Select category</option>{% for c in categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}</select></div>
+        <div class="col-md-4"><label class="form-label">Sub-category *</label><select id="subcategory" name="subcategory" class="form-select" required disabled><option value="">Select category first</option></select></div>
+        <div class="col-md-4"><label class="form-label">Specific Problem Type</label><select id="problem_type" name="problem_type" class="form-select" disabled><option value="">Select sub-category first</option></select></div>
+        <div class="col-md-8"><label class="form-label">Problem Title *</label><input name="title" class="form-control" maxlength="200" required placeholder="Briefly state the problem"></div>
+        <div class="col-md-4"><label class="form-label">Severity *</label><select name="severity" class="form-select"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="critical">Critical / Safety Risk</option></select></div>
+        <div class="col-12"><label class="form-label">Detailed Description *</label><textarea name="description" class="form-control" rows="5" required placeholder="What is wrong? What effect is it having? Include useful details for inspection."></textarea></div>
+        <div class="col-md-4"><label class="form-label">Campus / Area *</label><input name="location" class="form-control" required placeholder="e.g. Ugbowo Campus"></div>
+        <div class="col-md-4"><label class="form-label">Building / Facility</label><input name="building" class="form-control" placeholder="e.g. Faculty building"></div>
+        <div class="col-md-4"><label class="form-label">Nearest Landmark</label><input name="landmark" class="form-control" placeholder="Useful landmark"></div>
+        <div class="col-md-6"><label class="form-label">Photographic Evidence</label><input type="file" name="images" class="form-control" accept="image/*" multiple><div class="form-text">You may select multiple images.</div></div>
+        <div class="col-md-3"><label class="form-label">Latitude</label><input name="latitude" id="latitude" class="form-control" inputmode="decimal"></div>
+        <div class="col-md-3"><label class="form-label">Longitude</label><input name="longitude" id="longitude" class="form-control" inputmode="decimal"></div>
+        <div class="col-12 d-flex flex-wrap gap-2"><button type="button" class="btn btn-outline-secondary" id="getLocation"><i class="fa-solid fa-location-crosshairs me-1"></i> Use my current location</button></div>
+        <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" name="anonymous" id="anonymous"><label class="form-check-label" for="anonymous">Hide my identity from the public-facing report details</label></div><div class="form-text">Your account can still be retained internally for authorized follow-up where required.</div></div>
+        <div class="col-12"><button class="btn btn-uniben btn-lg"><i class="fa-solid fa-paper-plane me-2"></i>Submit Report for Tracking</button></div>
+      </div>
+    </form>
+  </div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function loadOptions(url,target,placeholder){target.disabled=true;target.innerHTML='<option value="">Loading...</option>';try{const r=await fetch(url);if(!r.ok)throw new Error();const data=await r.json();target.innerHTML='<option value="">'+placeholder+'</option>'+data.map(x=>`<option value="${x.id}">${x.name}</option>`).join('');target.disabled=false;}catch(e){target.innerHTML='<option value="">Unable to load options</option>';}}
+const category=document.getElementById('category'), subcategory=document.getElementById('subcategory'), problemType=document.getElementById('problem_type');
+category.addEventListener('change',e=>{problemType.disabled=true;problemType.innerHTML='<option value="">Select sub-category first</option>'; if(e.target.value)loadOptions('/api/subcategories/'+e.target.value+'/',subcategory,'Select sub-category'); else{subcategory.disabled=true;subcategory.innerHTML='<option value="">Select category first</option>';}});
+subcategory.addEventListener('change',e=>{if(e.target.value)loadOptions('/api/problem-types/'+e.target.value+'/',problemType,'Select problem type (optional)'); else{problemType.disabled=true;problemType.innerHTML='<option value="">Select sub-category first</option>';}});
+document.getElementById('getLocation').addEventListener('click',()=>{if(!navigator.geolocation)return alert('Location is not supported by this browser.');navigator.geolocation.getCurrentPosition(p=>{document.getElementById('latitude').value=p.coords.latitude.toFixed(6);document.getElementById('longitude').value=p.coords.longitude.toFixed(6);},()=>alert('Your location could not be retrieved. Please enter it manually if available.'));});
+</script>
+{% endblock %}
