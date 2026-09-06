@@ -29,3 +29,11 @@ A report may also be marked Rejected when appropriate.
 
 ## Important production-media note
 The application supports multiple uploaded photographs. Render's default web-service filesystem is ephemeral, so production deployments that need durable uploaded photos should use persistent disk or an external object-storage provider.
+
+
+## Anonymous reporting update
+- Problem reporting no longer requires authentication.
+- Unauthenticated submissions are automatically anonymous.
+- Authenticated users may choose anonymous reporting.
+- Anonymous reporters receive a unique reference and use the public tracking page to follow progress.
+- Notifications and account-linked dashboard history are retained only for identified authenticated submissions.

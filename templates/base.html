@@ -23,11 +23,12 @@
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
         <li class="nav-item"><a class="nav-link" href="{% url 'track_issue' %}"><i class="fa-solid fa-location-dot me-1"></i> Track Report</a></li>
         {% if user.is_authenticated %}
+          <li class="nav-item"><a class="btn btn-sm btn-gold me-lg-2" href="{% url 'logprob' %}"><i class="fa-solid fa-plus me-1"></i> Report Problem</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}"><i class="fa-solid fa-gauge-high me-1"></i> Dashboard</a></li>
           {% if can_manage_reports %}<li class="nav-item"><a class="nav-link" href="{% url 'manage_reports' %}"><i class="fa-solid fa-list-check me-1"></i> Manage Reports</a></li>{% endif %}
-          <li class="nav-item"><a class="btn btn-sm btn-gold ms-lg-2" href="{% url 'logprob' %}"><i class="fa-solid fa-plus me-1"></i> Report Problem</a></li>
           <li class="nav-item"><a class="nav-link ms-lg-2" href="{% url 'logout' %}">Logout</a></li>
         {% else %}
+          <li class="nav-item"><a class="btn btn-sm btn-gold me-lg-2" href="{% url 'logprob' %}"><i class="fa-solid fa-plus me-1"></i> Report Problem</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
           <li class="nav-item"><a class="btn btn-sm btn-gold ms-lg-2" href="{% url 'register' %}">Create Account</a></li>
         {% endif %}
@@ -41,7 +42,7 @@
   <div class="container">
     <div class="row g-4 align-items-start">
       <div class="col-lg-7"><h5 class="text-white mb-2">University of Benin</h5><div class="system-name">UNIBEN Infrastructure and Environmental Problem Reporting and Tracking System</div><div class="small mt-2 text-white-50">A web-based platform for transparent campus problem reporting, follow-up and resolution monitoring.</div></div>
-      <div class="col-lg-5 text-lg-end"><a class="text-decoration-none me-3" href="{% url 'track_issue' %}">Track a Report</a>{% if user.is_authenticated %}<a class="text-decoration-none" href="{% url 'logprob' %}">Report a Problem</a>{% endif %}</div>
+      <div class="col-lg-5 text-lg-end"><a class="text-decoration-none me-3" href="{% url 'track_issue' %}">Track a Report</a><a class="text-decoration-none" href="{% url 'logprob' %}">Report a Problem</a></div>
     </div>
     <hr class="footer-rule my-4"><div class="small text-white-50">&copy; {% now "Y" %} University of Benin &middot; UNIBEN IEPRTS</div>
   </div>
