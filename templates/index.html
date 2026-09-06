@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}UNIBEN IEPRTS | Home{% endblock %}
+{% block content %}
+<section class="hero py-5">
+  <div class="container py-lg-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="hero-kicker mb-3">University of Benin</div>
+        <h1 class="display-4 mb-3">Report it. Track it. Improve our campus.</h1>
+        <p class="lead mb-4">The <strong>UNIBEN Infrastructure and Environmental Problem Reporting and Tracking System</strong> provides one transparent channel for reporting campus problems and following each report from submission to resolution.</p>
+        <div class="d-flex flex-wrap gap-2"><a class="btn btn-gold btn-lg" href="{% if user.is_authenticated %}{% url 'logprob' %}{% else %}{% url 'login' %}{% endif %}"><i class="fa-solid fa-pen-to-square me-2"></i>Report a Problem</a><a class="btn btn-outline-light btn-lg" href="{% url 'track_issue' %}"><i class="fa-solid fa-magnifying-glass-location me-2"></i>Track a Report</a></div>
+      </div>
+      <div class="col-lg-6"><img class="img-fluid hero-visual" src="{% static 'img/uniben_ieprts_hero.png' %}" alt="UNIBEN infrastructure and environmental reporting and tracking system"></div>
+    </div>
+  </div>
+</section>
+<section class="container py-5">
+  <div class="row g-3 mb-5">
+    <div class="col-md-4"><div class="card metric-card p-4 h-100"><div class="d-flex align-items-center justify-content-between"><div><div class="small-muted">Reports Submitted</div><div class="metric-value">{{ total }}</div></div><div class="metric-icon"><i class="fa-solid fa-file-circle-check"></i></div></div></div></div>
+    <div class="col-md-4"><div class="card metric-card p-4 h-100"><div class="d-flex align-items-center justify-content-between"><div><div class="small-muted">Currently In Progress</div><div class="metric-value">{{ progress }}</div></div><div class="metric-icon"><i class="fa-solid fa-person-digging"></i></div></div></div></div>
+    <div class="col-md-4"><div class="card metric-card p-4 h-100"><div class="d-flex align-items-center justify-content-between"><div><div class="small-muted">Resolved</div><div class="metric-value">{{ resolved }}</div></div><div class="metric-icon"><i class="fa-solid fa-circle-check"></i></div></div></div></div>
+  </div>
+  <div class="text-center mb-4"><div class="section-kicker">How the system works</div><h2 class="section-title">From observation to tracked resolution</h2></div>
+  <div class="row g-4">
+    <div class="col-md-3"><div class="card p-4 h-100"><div class="feature-icon mb-3"><i class="fa-solid fa-triangle-exclamation"></i></div><h5>1. Report</h5><p class="text-muted mb-0">Describe the infrastructure or environmental problem, its location and severity.</p></div></div>
+    <div class="col-md-3"><div class="card p-4 h-100"><div class="feature-icon gold mb-3"><i class="fa-solid fa-camera"></i></div><h5>2. Add Evidence</h5><p class="text-muted mb-0">Upload photographs and, where available, geographical coordinates.</p></div></div>
+    <div class="col-md-3"><div class="card p-4 h-100"><div class="feature-icon mb-3"><i class="fa-solid fa-route"></i></div><h5>3. Track</h5><p class="text-muted mb-0">Use the unique reference number to monitor assignment, action and progress.</p></div></div>
+    <div class="col-md-3"><div class="card p-4 h-100"><div class="feature-icon green mb-3"><i class="fa-solid fa-check-double"></i></div><h5>4. Resolve</h5><p class="text-muted mb-0">Responsible personnel record actions taken and update the report through closure.</p></div></div>
+  </div>
+</section>
+<section class="container pb-4"><div class="card p-4 p-lg-5"><div class="row g-4"><div class="col-lg-6"><div class="section-kicker">Infrastructure</div><h3 class="section-title">Campus infrastructure problems</h3><p class="text-muted">Buildings, electricity, water supply, roads, walkways, lecture facilities, hostels, ICT, laboratories, security facilities, drainage infrastructure and related defects.</p></div><div class="col-lg-6"><div class="section-kicker">Environment</div><h3 class="section-title">Campus environmental problems</h3><p class="text-muted">Waste disposal, cleanliness, flooding, pollution, sanitation, pests, environmental hazards, offensive odours, erosion, landscaping and related concerns.</p></div></div></div></section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Track Report | UNIBEN IEPRTS{% endblock %}
+{% block content %}
+<div class="container py-5"><div class="row justify-content-center"><div class="col-xl-9">
+  <div class="text-center mb-4"><div class="section-kicker">Transparent Follow-up</div><h2 class="section-title">Track a Report</h2><p class="text-muted">Enter the unique UNIBEN IEPRTS reference number issued when the problem was submitted.</p></div>
+  <div class="card p-4 p-lg-5">
+    <form class="input-group input-group-lg mb-4" method="get"><input name="reference" class="form-control" value="{{ reference|default:'' }}" placeholder="UNIBEN-IEPRTS-20260906-ABC123" required><button class="btn btn-uniben"><i class="fa-solid fa-magnifying-glass me-1"></i> Track</button></form>
+    {% if reference and not report %}<div class="alert alert-warning mb-0">No report was found for <strong>{{ reference }}</strong>. Please check the reference number and try again.</div>{% endif %}
+    {% if report %}
+      <div class="d-flex flex-wrap justify-content-between gap-2 align-items-start mb-3"><div><div class="small-muted">Reference Number</div><h4 class="mb-1">{{ report.reference }}</h4><div class="small-muted">Submitted {{ report.created_at|date:'d M Y, H:i' }}</div></div><span class="status-pill status-{{ report.status }}">{{ report.get_status_display }}</span></div>
+      <hr><div class="row g-4"><div class="col-lg-7"><h5>{{ report.title }}</h5><p>{{ report.description }}</p><div class="row g-3 small"><div class="col-sm-6"><strong>Category</strong><br>{{ report.category }}</div><div class="col-sm-6"><strong>Severity</strong><br>{{ report.get_severity_display }}</div><div class="col-sm-6"><strong>Location</strong><br>{{ report.location }}{% if report.building %}, {{ report.building }}{% endif %}</div><div class="col-sm-6"><strong>Responsible Unit</strong><br>{{ report.assigned_department|default:'Pending assignment' }}</div>{% if report.expected_resolution_date %}<div class="col-sm-6"><strong>Expected Resolution</strong><br>{{ report.expected_resolution_date|date:'d M Y' }}</div>{% endif %}{% if report.resolution_summary %}<div class="col-12"><strong>Resolution Summary</strong><br>{{ report.resolution_summary }}</div>{% endif %}</div></div>
+      <div class="col-lg-5"><h5>Tracking History</h5><div class="timeline mt-3">{% for u in report.updates.all %}<div class="timeline-item"><span class="timeline-dot"></span><strong>{% if u.new_status %}{{ u.new_status|title }}{% else %}Update{% endif %}</strong><div>{{ u.note }}</div><div class="small-muted">{{ u.created_at|date:'d M Y, H:i' }}</div></div>{% empty %}<p class="text-muted">No tracking updates have been recorded yet.</p>{% endfor %}</div></div></div>
+      {% if report.images.all %}<hr><h5 class="mb-3">Photographic Evidence</h5><div class="row g-3">{% for img in report.images.all %}<div class="col-6 col-md-4"><a href="{{ img.image.url }}" target="_blank" rel="noopener"><img class="report-photo" src="{{ img.image.url }}" alt="Evidence image for {{ report.reference }}"></a></div>{% endfor %}</div>{% endif %}
+    {% endif %}
+  </div>
+</div></div></div>
+{% endblock %}
