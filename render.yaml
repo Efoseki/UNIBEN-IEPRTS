@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: uniben-ieprts
+    runtime: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && python manage.py seed_prs
+    startCommand: gunicorn problem_reporting.wsgi:application
+    healthCheckPath: /
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: uniben-ieprts-db
+          property: connectionString
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://uniben-ieprts.onrender.com"
+
+databases:
+  - name: uniben-ieprts-db
+    plan: free
+    region: frankfurt
