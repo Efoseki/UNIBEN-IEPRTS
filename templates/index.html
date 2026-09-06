@@ -8,7 +8,7 @@
         <div class="hero-kicker mb-3">University of Benin</div>
         <h1 class="display-4 mb-3">Report it. Track it. Improve our campus.</h1>
         <p class="lead mb-4">The <strong>UNIBEN Infrastructure and Environmental Problem Reporting and Tracking System</strong> provides one transparent channel for reporting campus problems and following each report from submission to resolution.</p>
-        <div class="d-flex flex-wrap gap-2"><a class="btn btn-gold btn-lg" href="{% if user.is_authenticated %}{% url 'logprob' %}{% else %}{% url 'login' %}{% endif %}"><i class="fa-solid fa-pen-to-square me-2"></i>Report a Problem</a><a class="btn btn-outline-light btn-lg" href="{% url 'track_issue' %}"><i class="fa-solid fa-magnifying-glass-location me-2"></i>Track a Report</a></div>
+        <div class="d-flex flex-wrap gap-2"><a class="btn btn-gold btn-lg" href="{% if user.is_authenticated %}{% url 'logprob' %}{% else %}{% url 'report-problem' %}{% endif %}"><i class="fa-solid fa-pen-to-square me-2"></i>Report a Problem</a><a class="btn btn-outline-light btn-lg" href="{% url 'track_issue' %}"><i class="fa-solid fa-magnifying-glass-location me-2"></i>Track a Report</a></div>
       </div>
       <div class="col-lg-6"><img class="img-fluid hero-visual" src="{% static 'img/uniben_ieprts_hero.png' %}" alt="UNIBEN infrastructure and environmental reporting and tracking system"></div>
     </div>
