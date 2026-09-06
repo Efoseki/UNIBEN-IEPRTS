@@ -36,3 +36,31 @@ Render web-service filesystems are ephemeral. For durable production image stora
 
 ## Render note
 The deployment package includes a root-level `render.yaml`. If Render reports that `render.yaml` cannot be found, make sure the repository contains the contents of this package at its root rather than nesting them inside another directory, or explicitly set the Blueprint path in Render.
+
+
+## Render administrator setup (Free plan)
+
+The Render Free web service does not provide Dashboard Shell/SSH access. This project
+therefore includes a `create_admin` management command that runs during deployment.
+
+In the Render Dashboard, add these environment variables to the web service:
+
+- `DJANGO_SUPERUSER_USERNAME` — desired administrator username
+- `DJANGO_SUPERUSER_EMAIL` — administrator email
+- `DJANGO_SUPERUSER_PASSWORD` — strong administrator password
+
+Do not commit the password to GitHub or put it in `render.yaml`. The `render.yaml`
+file declares these variables with `sync: false`, so their secret values are supplied
+through the Render Dashboard.
+
+On each deployment, `python manage.py create_admin` runs after migrations and seed
+data. If the username does not exist, it creates a Django superuser and an IEPRTS
+administrator profile. If it already exists, the command leaves the existing password
+unchanged, making repeated deployments safe.
+
+After deployment, sign in at `/admin/`.
+
+
+
+### Anonymous reporting
+The report form is publicly accessible without login. Visitors may submit infrastructure or environmental problems anonymously and track them using the generated reference number. Logged-in users can also choose the anonymous option.

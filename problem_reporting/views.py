@@ -50,12 +50,10 @@ def home(request):
     progress=counts.get('progress',0)+counts.get('assigned',0)+counts.get('review',0)
     return render(request,'index.html',{'total':sum(counts.values()),'resolved':counts.get('resolved',0)+counts.get('closed',0),'progress':progress})
 
-
 def problem_log(request):
     cats=Category.objects.filter(active=True).order_by('name')
     return render(request,'problem_log.html',{'categories':cats})
 
-@login_required
 def process_problem(request):
     if request.method!='POST':
         return redirect('logprob')
@@ -64,9 +62,16 @@ def process_problem(request):
     ptype=None
     if request.POST.get('problem_type'):
         ptype=get_object_or_404(ProblemType,pk=request.POST['problem_type'],subcategory=sub,active=True)
+    # Reporting is available without an account. If a user is logged in,
+    # they may still choose anonymous reporting; in that case the reporter
+    # identity is not attached to the report. Anonymous reports are tracked
+    # through the generated reference number.
+    is_anonymous = request.POST.get('anonymous') == 'on' or not request.user.is_authenticated
+    reporter = request.user if request.user.is_authenticated and not is_anonymous else None
+
     report=ProblemReport.objects.create(
-        reporter=request.user,
-        anonymous=request.POST.get('anonymous')=='on',
+        reporter=reporter,
+        anonymous=is_anonymous,
         category=category,subcategory=sub,problem_type=ptype,
         title=request.POST.get('title','').strip(),description=request.POST.get('description','').strip(),
         location=request.POST.get('location','').strip(),building=request.POST.get('building','').strip(),landmark=request.POST.get('landmark','').strip(),
@@ -74,9 +79,22 @@ def process_problem(request):
     )
     for f in request.FILES.getlist('images'):
         ProblemImage.objects.create(report=report,image=f)
-    ReportUpdate.objects.create(report=report,author=request.user,new_status='submitted',note='Problem report submitted and tracking reference generated.')
-    Notification.objects.create(user=request.user,report=report,title='Report submitted',message=f'Your report {report.reference} has been received and can now be tracked.')
-    messages.success(request,f'Report submitted successfully. Your tracking reference is {report.reference}.')
+    ReportUpdate.objects.create(
+        report=report,
+        author=request.user if request.user.is_authenticated else None,
+        new_status='submitted',
+        note='Problem report submitted and tracking reference generated.'
+    )
+    if reporter:
+        Notification.objects.create(
+            user=reporter,
+            report=report,
+            title='Report submitted',
+            message=f'Your report {report.reference} has been received and can now be tracked.'
+        )
+        messages.success(request,f'Report submitted successfully. Your tracking reference is {report.reference}.')
+    else:
+        messages.success(request,f'Report submitted anonymously. Please keep your tracking reference: {report.reference}.')
     return redirect(f"{reverse('track_issue')}?reference={report.reference}")
 
 

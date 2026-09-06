@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container py-5">
   <div class="row justify-content-center"><div class="col-xl-10">
-    <div class="mb-4"><div class="section-kicker">New Report</div><h2 class="section-title">Report an Infrastructure or Environmental Problem</h2><p class="text-muted">Give enough detail to help the responsible unit locate, assess and resolve the problem. Fields marked * are required.</p></div>
+    <div class="mb-4"><div class="section-kicker">New Report</div><h2 class="section-title">Report an Infrastructure or Environmental Problem</h2><p class="text-muted">Give enough detail to help the responsible unit locate, assess and resolve the problem. Fields marked * are required.</p><div class="alert alert-info mt-3"><i class="fa-solid fa-user-secret me-2"></i><strong>Anonymous reporting is available.</strong> You do not need to create an account. After submission, keep your unique tracking reference so you can monitor progress.</div></div>
     <form method="post" action="{% url 'process' %}" enctype="multipart/form-data" class="card p-4 p-lg-5">{% csrf_token %}
       <div class="row g-4">
         <div class="col-md-4"><label class="form-label">Main Category *</label><select id="category" name="category" class="form-select" required><option value="">Select category</option>{% for c in categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}</select></div>
@@ -19,7 +19,7 @@
         <div class="col-md-3"><label class="form-label">Latitude</label><input name="latitude" id="latitude" class="form-control" inputmode="decimal"></div>
         <div class="col-md-3"><label class="form-label">Longitude</label><input name="longitude" id="longitude" class="form-control" inputmode="decimal"></div>
         <div class="col-12 d-flex flex-wrap gap-2"><button type="button" class="btn btn-outline-secondary" id="getLocation"><i class="fa-solid fa-location-crosshairs me-1"></i> Use my current location</button></div>
-        <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" name="anonymous" id="anonymous"><label class="form-check-label" for="anonymous">Hide my identity from the public-facing report details</label></div><div class="form-text">Your account can still be retained internally for authorized follow-up where required.</div></div>
+        <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" name="anonymous" id="anonymous"><label class="form-check-label" for="anonymous">Submit this report anonymously</label></div><div class="form-text">If you are not logged in, the report is automatically anonymous. If you are logged in, checking this option prevents your account from being attached to the report.</div></div>
         <div class="col-12"><button class="btn btn-uniben btn-lg"><i class="fa-solid fa-paper-plane me-2"></i>Submit Report for Tracking</button></div>
       </div>
     </form>
