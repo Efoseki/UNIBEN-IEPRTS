@@ -15,7 +15,7 @@ class Login(LoginView):
     redirect_authenticated_user=True
 
 class Logout(LogoutView):
-    next_page='/'
+    next_page='home'
 
 
 def register(request):
