@@ -50,7 +50,7 @@ def home(request):
     progress=counts.get('progress',0)+counts.get('assigned',0)+counts.get('review',0)
     return render(request,'index.html',{'total':sum(counts.values()),'resolved':counts.get('resolved',0)+counts.get('closed',0),'progress':progress})
 
-@login_required
+# @login_required
 def problem_log(request):
     cats=Category.objects.filter(active=True).order_by('name')
     return render(request,'problem_log.html',{'categories':cats})
