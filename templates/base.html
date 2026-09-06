@@ -28,10 +28,12 @@
           {% if can_manage_reports %}<li class="nav-item"><a class="nav-link" href="{% url 'manage_reports' %}"><i class="fa-solid fa-list-check me-1"></i> Manage Reports</a></li>{% endif %}
           <!-- <li class="nav-item"><a class="nav-link ms-lg-2" href="{% url 'logout' %}">Logout</a></li>  -->
 
-          <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="button-logout"> Log Out</button>
-          </form>
+          <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="button-logout"> Log Out</button>
+            </form>
+          </li>
 
         {% else %}
           <li class="nav-item"><a class="btn btn-sm btn-gold me-lg-2" href="{% url 'logprob' %}"><i class="fa-solid fa-plus me-1"></i> Report Problem</a></li>
