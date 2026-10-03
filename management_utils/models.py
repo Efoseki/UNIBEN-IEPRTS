@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-import uuid
 
 STATUS_CHOICES=[('submitted','Submitted'),('review','Under Review'),('assigned','Assigned'),('progress','In Progress'),('resolved','Resolved'),('closed','Closed'),('rejected','Rejected')]
 SEVERITY_CHOICES=[('low','Low'),('medium','Medium'),('high','High'),('critical','Critical')]
@@ -70,7 +69,24 @@ class ProblemReport(models.Model):
     class Meta: ordering=['-created_at']
     def save(self,*args,**kwargs):
         if not self.reference:
-            self.reference=f'UNIBEN-IEPRTS-{timezone.now():%Y%m%d}-{uuid.uuid4().hex[:6].upper()}'
+            now = timezone.localtime()
+            date_part = now.strftime('%Y%m%d')
+            prefix = f'PRN-{date_part}-'
+            last_report = (
+                ProblemReport.objects
+                .filter(reference__startswith=prefix)
+                .order_by('-reference')
+                .first()
+            )
+            next_number = 1
+            if last_report:
+                try:
+                    next_number = int(last_report.reference.rsplit('-', 1)[1]) + 1
+                except (ValueError, IndexError):
+                    next_number = 1
+            while ProblemReport.objects.filter(reference=f'{prefix}{next_number:06d}').exists():
+                next_number += 1
+            self.reference = f'{prefix}{next_number:06d}'
         super().save(*args,**kwargs)
     def __str__(self): return self.reference
 
