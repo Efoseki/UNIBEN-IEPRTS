@@ -6,7 +6,7 @@ A deployment-ready Django application for the University of Benin that supports 
 - User registration, login and reporting dashboard
 - Infrastructure and environmental category hierarchy
 - Problem description, location, severity, optional GPS coordinates and multiple photographs
-- Unique tracking reference numbers in the format `UNIBEN-IEPRTS-YYYYMMDD-XXXXXX`
+- Unique tracking reference numbers in the format `PRN-YYYYMMDD-000001`
 - Public tracking page with status/action timeline
 - Authorized problem-management list with search and filtering
 - Selective processing of each reported problem
@@ -15,6 +15,8 @@ A deployment-ready Django application for the University of Benin that supports 
 - Reporter notifications stored in the application
 - Enhanced Django administration
 - PostgreSQL/Render and WhiteNoise configuration
+- Case-insensitive usernames with case-sensitive passwords
+- Local/offline SQLite testing support
 
 ## Local setup
 1. `python -m venv venv`
@@ -32,7 +34,9 @@ Django superusers and staff can manage all reports. Application users with Profi
 Use `render.yaml` or configure the web service manually. Required production environment values include `SECRET_KEY`, `DEBUG=False` and the PostgreSQL `DATABASE_URL`. Also set `CSRF_TRUSTED_ORIGINS` to the deployed HTTPS origin if needed.
 
 ### User-uploaded photographs
-Render web-service filesystems are ephemeral. For durable production image storage, configure a persistent disk or an external object-storage service (for example Cloudinary or S3-compatible storage). Local development continues to use `MEDIA_ROOT`.
+Uploaded photographs are served from `MEDIA_ROOT` so they can be displayed on report tracking/detail pages. Local development stores them in the project's `media/` folder.
+
+Render web-service filesystems are ephemeral. For a durable production system, configure a persistent disk or an external object-storage service (for example Cloudinary or S3-compatible storage). The current Render demo can display uploaded images while the files remain on the running service instance.
 
 ## Render note
 The deployment package includes a root-level `render.yaml`. If Render reports that `render.yaml` cannot be found, make sure the repository contains the contents of this package at its root rather than nesting them inside another directory, or explicitly set the Blueprint path in Render.

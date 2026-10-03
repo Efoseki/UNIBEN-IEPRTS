@@ -23,5 +23,6 @@ urlpatterns=[
     path('login/',views.Login.as_view(),name='login'),
     path('logout/',views.Logout.as_view(),name='logout'),
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+# Serve uploaded report images in both local development and the deployed demo.
+# For a production system, durable object storage (or a Render persistent disk) is recommended.
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

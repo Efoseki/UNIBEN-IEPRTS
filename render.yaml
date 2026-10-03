@@ -16,8 +16,6 @@ services:
         fromDatabase:
           name: uniben-ieprts-db
           property: connectionString
-      - key: CSRF_TRUSTED_ORIGINS
-        value: "https://uniben-ieprts.onrender.com"
       - key: DJANGO_SUPERUSER_USERNAME
         sync: false
       - key: DJANGO_SUPERUSER_EMAIL

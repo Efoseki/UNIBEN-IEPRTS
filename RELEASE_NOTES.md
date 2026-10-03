@@ -1,3 +1,5 @@
+- Updated new report references to the shorter format `PRN-YYYYMMDD-000001`, using a sequential six-digit number per day. Existing historical references remain valid.
+- Bundled Bootstrap 5.3.6 CSS and JavaScript locally to remove the Bootstrap CDN dependency.
 # UNIBEN IEPRTS — Updated Release
 
 Official project title implemented throughout the application:
@@ -9,7 +11,7 @@ Short system label used in compact interface areas: **UNIBEN IEPRTS**.
 ## Major updates in this release
 - Rebranded the navigation, page titles, footer, login/registration screens, tracking interface and administration area.
 - Replaced “Infrastructural” with “Infrastructure” in the main classification and included a migration to normalize existing data.
-- Updated newly generated tracking references to `UNIBEN-IEPRTS-YYYYMMDD-XXXXXX` while leaving existing historical references valid.
+- Updated newly generated tracking references to `PRN-YYYYMMDD-000001` while leaving existing historical references valid.
 - Added a redesigned UNIBEN-themed hero graphic emphasizing reporting and tracking.
 - Added dedicated account registration.
 - Rebuilt the problem-report form with category-dependent fields, photo evidence, severity, campus location and optional browser geolocation.

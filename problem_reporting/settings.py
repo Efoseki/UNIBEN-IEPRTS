@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security 
 # SECRET_KEY = 'django-insecure-g-d^jt%j9zmdmx6x8+rauc@un_fu6$sr%^5ab8ky^(i*&*=a*1'
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-g-d^jt%j9zmdmx6x8+rauc@un_fu6$sr%^5ab8ky^(i*&*=a*1')
-DEBUG = os.environ.get('DEBUG', 'False').lower() in ('1','true','yes')
+DEBUG = os.environ.get('DEBUG', 'True' if not os.environ.get('RENDER_EXTERNAL_HOSTNAME') else 'False').lower() in ('1','true','yes')
 
 # Allow Render's external URL
 ALLOWED_HOSTS = ['localhost','127.0.0.1']
@@ -135,6 +135,11 @@ LOGIN_URL = 'login'
 
 
 CSRF_TRUSTED_ORIGINS = [x.strip() for x in os.environ.get('CSRF_TRUSTED_ORIGINS','').split(',') if x.strip()]
+if RENDER_EXTERNAL_HOSTNAME:
+    _render_origin = f'https://{RENDER_EXTERNAL_HOSTNAME}'
+    if _render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_render_origin)
+
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO','https')

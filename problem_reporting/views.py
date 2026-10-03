@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CaseInsensitiveAuthenticationForm, CaseInsensitiveUserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
@@ -12,6 +12,7 @@ from management_utils.models import Category, Department, Notification, ProblemI
 
 class Login(LoginView):
     template_name='users/login.html'
+    authentication_form=CaseInsensitiveAuthenticationForm
     redirect_authenticated_user=True
 
 class Logout(LogoutView):
@@ -21,14 +22,14 @@ class Logout(LogoutView):
 def register(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
-    form=UserCreationForm(request.POST or None)
+    form=CaseInsensitiveUserCreationForm(request.POST or None)
     for field in form.fields.values():
         field.widget.attrs['class']='form-control'
     if request.method=='POST' and form.is_valid():
         user=form.save()
         Profile.objects.get_or_create(user=user,defaults={'role':'student'})
         login(request,user)
-        messages.success(request,'Your account has been created. You can now submit and track reports.')
+        messages.success(request,'Your account has been created')
         return redirect('dashboard')
     return render(request,'users/register.html',{'form':form})
 
